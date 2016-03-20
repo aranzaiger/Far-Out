@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
- * Created by sagi on 2/10/16.
+ * AnimatedSprite represents a sprite with animated img
  */
 public abstract class AnimatedSprite extends Sprite {
     protected Vector<Animation> animations;
@@ -20,6 +20,7 @@ public abstract class AnimatedSprite extends Sprite {
     public AnimatedSprite(int x, int y, int w, int h, int acc, String imgName, double angle, int sWidth, int sHeight, int numOfFirstFrames) {
         super(x, y, w, h, acc, imgName, angle, sWidth, sHeight);
         animations = new Vector<>();
+        //start first animation of set of animations
         initFirstAnimation(imgName, numOfFirstFrames);
         currentAnimation = 0;
 
@@ -27,6 +28,7 @@ public abstract class AnimatedSprite extends Sprite {
 
     protected abstract void initFirstAnimation(String spriteSheet, int numOfFirstFrames);
 
+    //draw each time the correct image of the animation
     @Override
     public void drawSprite(Graphics g, JPanel p) {
         if(animations.size() == 0)
@@ -35,6 +37,8 @@ public abstract class AnimatedSprite extends Sprite {
         g2d.rotate(Math.toRadians(angle), locX + (bImage.getWidth() / 2), locY + (bImage.getHeight() / 2));
         g.drawImage(animations.get(currentAnimation).getCurrentFrame(), locX, locY, p);
         g2d.rotate(-1 * Math.toRadians(angle), locX + (bImage.getWidth() / 2), locY + (bImage.getHeight() / 2));
+
+        //fix img if it goes beyond screen borders
         if(screenLoop) {
             drawScreenLoopFix(g, p);
             outOfScreeFix();
@@ -46,11 +50,13 @@ public abstract class AnimatedSprite extends Sprite {
         bImage = animations.get(currentAnimation).getCurrentFrame();
         super.drawScreenLoopFix(g,p);
     }
-    
+
+    //gets current used frame from animation
     public int getFrameNum(){
     	return animations.get(currentAnimation).getFrameIndex();
     }
 
+    //decide which animation to play. go back to start if finished
     public void setCurrentAnimation(int animation){
         if(animation < 0){
             throw new IllegalArgumentException("Animation index cant be negative");
@@ -66,6 +72,7 @@ public abstract class AnimatedSprite extends Sprite {
     }
 
 
+    //a class to represent an animation in SpriteAnimation
     protected class Animation {
 
         private int totalLoopTime;
@@ -100,13 +107,18 @@ public abstract class AnimatedSprite extends Sprite {
 
         }
 
+
+        //returns current played frame index
         public int getFrameIndex() { return currentFrame;}
 
+
+        //add more frames if animation changed
         private void addFrame(BufferedImage image, double frameLength) {
             frames.add(new AnimationFrame(image, totalLoopTime,frameLength));
             totalLoopTime += frameLength;
         }
 
+        //returns current played frame
         public BufferedImage getCurrentFrame() {
             long now = System.currentTimeMillis();
             long delta = now - startingTime;
@@ -121,6 +133,7 @@ public abstract class AnimatedSprite extends Sprite {
             return frames.get(currentFrame).getFrame();
         }
 
+        //represents a single frame from animation
         protected class AnimationFrame {
             private double startTime, endTime;
             private BufferedImage frame;

@@ -1,7 +1,7 @@
 package com.sagi.dayan.Games.Elements;
 
 /**
- * Created by sagi on 2/24/16.
+ * Animation for box in main menu
  */
 public class MenuBoxSprite extends AnimatedSprite {
     public MenuBoxSprite(int x, int y, int w, int h, int acc, String imgName, double angle, int sWidth, int sHeight, int numOfFirstFrames) {

@@ -15,7 +15,8 @@ import com.sagi.dayan.Games.Utils.Utils;
 //import sun.audio.AudioStream;
 
 /**
- * Created by sagi on 2/27/16.
+ * Settings menu - currently controls menu.
+ * not possible to change keys yet
  */
 public class SettingsMenuScene extends Scene {
     private BufferedImage background;

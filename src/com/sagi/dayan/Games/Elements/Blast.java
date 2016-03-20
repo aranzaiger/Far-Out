@@ -2,6 +2,9 @@ package com.sagi.dayan.Games.Elements;
 
 import com.sagi.dayan.Games.Elements.AnimatedSprite.Animation;
 
+/*
+	represents a blast when player ship explodes
+ */
 public class Blast extends AnimatedSprite {
 
 	protected boolean isDone;
@@ -18,6 +21,7 @@ public class Blast extends AnimatedSprite {
 		animations.add(new Animation("explosion.png", 16, 500));
 	}
 
+	//set done when finished iterating on all frames
 	@Override
 	public void update() {
 		System.out.println("curr: "+currentAnimation+", total: "+numOfFirstFrames);
