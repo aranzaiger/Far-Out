@@ -461,7 +461,7 @@ public abstract class Level extends Scene {
 						eMTR.add(enemyMissiles.get(j));
 					}else{
 						blasts.add(new Blast((int)players.get(i).getLocX(),(int)players.get(i).getLocY(),"explosion.png",15));
-
+						Utils.playSound("player_exp.wav");
 					}
 				}
 			}
@@ -540,6 +540,7 @@ public abstract class Level extends Scene {
 
 	protected void playerHit(int i){
 		if(players.get(i).isMortal()){
+			Utils.playSound((i == 0) ? "player_1_hit.wav" : "player_2_hit.wav");
 			engine.setPlayerHealth(i, -10);
 			if(i == 0){
 				if(engine.getP1Health() == 100){

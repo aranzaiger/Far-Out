@@ -4,9 +4,11 @@ import java.awt.Graphics;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.rmi.CORBA.Util;
 import javax.swing.JPanel;
 
 import com.sagi.dayan.Games.Stage.Level;
+import com.sagi.dayan.Games.Utils.Utils;
 
 /**
  * Created by sagi on 3/11/16.
@@ -56,6 +58,7 @@ public class Wave {
             }else{
                 enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, "L1-ES2.png", 0, 15, 15, fireDelay, stepDelay, this, moveVector, 2, hitsToDestroy));
             }
+            Utils.playSound("enemy_enter.wav");
             lastLaunchTime = now;
             currentAmount++;
         }
@@ -83,8 +86,10 @@ public class Wave {
     }
 
     public void fireFromEnemy(EnemyShip e){
-    	if(!e.isDead())
-    		level.enemyFire(e.getCenterX(), (int)(e.getLocY() + e.getsHeight()), -(e.getAcceleration() + 2));
+    	if(!e.isDead()) {
+            level.enemyFire(e.getCenterX(), (int) (e.getLocY() + e.getsHeight()), -(e.getAcceleration() + 2));
+            Utils.playSound("enemy_relese.wav");
+        }
     }
 
     public Vector <EnemyShip> getEnemies() {
