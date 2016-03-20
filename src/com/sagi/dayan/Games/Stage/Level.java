@@ -411,8 +411,8 @@ public abstract class Level extends Scene {
 			g.drawString("PRESS START", 45, 35 * (i + 1));
 
 		}
-		players.get(i).setLocY(-500);
-		players.get(i).setLocX(-500);
+		players.get(i).setLocY(Integer.MIN_VALUE);
+		players.get(i).setLocX(Integer.MIN_VALUE);
 	}
 
 	protected void renderGameOver(Graphics g, JPanel p, int i){
