@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -67,7 +68,9 @@ public abstract class Level extends Scene {
 		keys = new HashMap<>();
 		yAxisStartingAnimation = new int[]{height + (5*GameEngine.PLAYER_HEIGHT) , height - (4*GameEngine.PLAYER_HEIGHT) , height - (GameEngine.PLAYER_HEIGHT + 15)};
 		startingAnimationIndex = 0;
-		bg = new Background(0,0,width,height, 1, "L1-BG.jpg", 0,1000, 4760);
+		Random r = new Random();
+		int bgIndex = r.nextInt(5) + 1;
+		bg = new Background(0,0,width,height, 1, "L"+bgIndex+"-BG.jpg", 0,1000, 4760);
 		this.numOfPlayers = numOfPlayers;
 		this.title = stageTitle;
 		this.stageTitle = new JLabel(this.title);
@@ -426,8 +429,8 @@ public abstract class Level extends Scene {
 			g.drawString("PRESS START", 45, 35 * (i + 1));
 
 		}
-		players.get(i).setLocY(-500);
-		players.get(i).setLocX(-500);
+		players.get(i).setLocY(Integer.MIN_VALUE);
+		players.get(i).setLocX(Integer.MIN_VALUE);
 	}
 
 	protected void renderGameOver(Graphics g, JPanel p, int i){
