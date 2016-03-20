@@ -104,8 +104,8 @@ public class GameEngine {
         resetPlayerHealth(1);
         p1Score = p2Score = 0;
         credits = 3;
-        p1Lives = 1;
-        p2Lives = 1;
+        p1Lives = 3;
+        p2Lives = 3;
     }
 
     public int getP1CreditTime() {
