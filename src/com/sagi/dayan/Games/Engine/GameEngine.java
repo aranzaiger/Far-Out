@@ -23,10 +23,14 @@ import com.sagi.dayan.Games.Utils.Utils;
 import com.sagi.dayan.Games.Utils.WaveConfigs;
 
 
+/**
+ *  this class is the game engine
+ *  it updates and renders the current scene (i.e. start menu, stages etc.)
+ */
 
 public class GameEngine {
-    private final int CREDIT_TIME = 10;
-    public boolean gameOn , gameOver, isFirstGame;
+    private final int CREDIT_TIME = 10, FULL_HEALTH = 100; //timeout for credits
+    public boolean gameOn , gameOver, isFirstGame;  //flags to determine game state
     private JFrame frame;
     private int pWidth, pHeight, numOfPlayers;	//panel dimensions
     private Random r;
@@ -34,13 +38,14 @@ public class GameEngine {
     private Scene scene;
     private int p1CreditTime, p2CreditTime, creditTickTime = 1;
     public static final int PLAYER_WIDTH = 120, PLAYER_HEIGHT = 120;
-    public static final int UP=0,RIGHT=1,DOWN=2, LEFT=3, FIRE=4, USE_CREDIT=5;
-    public int p1HighScore, p2HighScore;
 
+    //player 1 & 2 controls
+    public static final int UP=0,RIGHT=1,DOWN=2, LEFT=3, FIRE=4, USE_CREDIT=5;
     private int[] p1Controlles = {KeyEvent.VK_UP, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_K, KeyEvent.VK_J};
     private int[] p2Controlles = {KeyEvent.VK_W, KeyEvent.VK_D, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_Q, KeyEvent.VK_Z};
 
     private int p1Lives, p2Lives, p1Health, p2Health, credits, p1Score, p2Score;
+    public int p1HighScore, p2HighScore;
 
     private long lastP1CreditTick, lastP2CreditTick;
 
@@ -48,6 +53,8 @@ public class GameEngine {
 
     private WaveConfigs waveConfigs;
     private int currentLevel;
+
+
 
     public GameEngine(int width, int height, Stage stage){
     	p1HighScore =  p2HighScore = 0;
@@ -69,23 +76,20 @@ public class GameEngine {
             gameFont = null;
         }
         this.waveConfigs = new WaveConfigs();
-        startNewGame();
 
+        startNewGame(); //initialize a new game
     }
 
 
+    //reset player health to full health
     private void resetPlayerHealth(int i){
         if (i==0){
-            p1Health = 100;
+            p1Health = FULL_HEALTH;
         }
         else{
-            p2Health = 100;
+            p2Health = FULL_HEALTH;
         }
     }
- 
-
-
-
 
     /**
      * initialize and reset vars and timers to "new game" configuration.
@@ -121,8 +125,6 @@ public class GameEngine {
     }
 
 
-
-
     /**
      * returns gameOver flag
      * @return
@@ -133,11 +135,8 @@ public class GameEngine {
     }
 
 
-
-
-
     /**
-     * Update all sprites, including collision handling.
+     * Update all scenes
      */
     public void update(){
         long now = System.currentTimeMillis();
@@ -160,14 +159,15 @@ public class GameEngine {
         return scene.getSceneImage();
     }
 
+    //initializes a new game
     public void startGame(int numOfPlayers){
         this.numOfPlayers = numOfPlayers;
         startNewGame();
         changeLevel();
     }
 
+    //move to next level (scene) and attach listeners
     public void changeLevel(){
-    	System.out.println("current level: "+currentLevel);
         currentLevel++;
         stage.removeMouseListener(scene);
         stage.removeKeyListener(scene);
@@ -199,7 +199,7 @@ public class GameEngine {
         stage.addMouseListener(scene);
     }
 
-
+    //load controls menu
     public void goToSettings() {
         stage.removeMouseListener(scene);
         stage.removeKeyListener(scene);
@@ -251,10 +251,10 @@ public class GameEngine {
         credits--;
     }
     
+    //when a player uses a credit - reset health, lives and consume credit
     public void revivePlayer(int i)
     {
 		useCredit();
-
     	if(i==0){
     		p1Health=100;
 			p1Lives =3;
@@ -266,7 +266,7 @@ public class GameEngine {
 
     }
     
-
+    //add score to the correct player
     public void setScore(int i, int score)
     {
         if (i == 0) {
@@ -275,6 +275,10 @@ public class GameEngine {
             p2Score += score;
         }
     }
+
+
+    // if a player gets hit - consume health
+    //if health is 0 - consume life
     public void setPlayerHealth(int i, int strike) {
         if (i == 0) {
             p1Health += strike;
@@ -301,6 +305,7 @@ public class GameEngine {
         }
     }
 
+    //go to main menu
     public void goToMenu(){
         stage.removeMouseListener(scene);
         stage.removeKeyListener(scene);

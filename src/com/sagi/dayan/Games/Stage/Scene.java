@@ -1,7 +1,7 @@
 package com.sagi.dayan.Games.Stage;
 
 /**
- * Created by sagi on 2/8/16.
+ * Represents a Scene in the game (i.e. main menu, stage etc.)
  */
 
 import java.awt.event.KeyListener;
@@ -14,14 +14,6 @@ import com.sagi.dayan.Games.Engine.GameEngine;
 
 public abstract class Scene extends MouseAdapter implements KeyListener{
 
-    public int getStageWidth() {
-        return stageWidth;
-    }
-
-    public int getStageHeight() {
-        return stageHeight;
-    }
-
     protected int stageWidth, stageHeight;
     protected BufferedImage sceneImage;
     protected GameEngine engine;
@@ -30,6 +22,14 @@ public abstract class Scene extends MouseAdapter implements KeyListener{
         this.stageWidth = stageWidth;
         this.stageHeight = stageHeight;
         this.engine = engine;
+    }
+
+    //get dimentions
+    public int getStageWidth() {
+        return stageWidth;
+    }
+    public int getStageHeight() {
+        return stageHeight;
     }
 
     public abstract void update ();

@@ -11,19 +11,20 @@ import com.sagi.dayan.Games.Stage.Level;
 import com.sagi.dayan.Games.Utils.Utils;
 
 /**
- * Created by sagi on 3/11/16.
+ * represents a single wave of enemy ships.
+ * this class will manage a wave of enemies, create them when needed & create missiles when needed.
+ * timing of creating and shooting is done using system time.
  */
 public class Wave {
 
-    protected Level level;
-    protected  int enemyMaxAmount, currentAmount, acc, startX, startY;
+    protected Level level;      //used to ask for a misslie to be created
+    protected  int enemyMaxAmount, currentAmount, hitsToDestroy, acc, startX, startY;
     protected double stepDelay,fireDelay, launchDelay;
     protected int[] moveVector;
     protected Vector<EnemyShip> enemies;
     protected Vector<Missile> bullets;
     protected long lastLaunchTime;
     protected String imageName;
-    protected int hitsToDestroy;
     protected Random r;
     protected boolean isShipOfTypeOne;
 
@@ -44,24 +45,30 @@ public class Wave {
         this.lastLaunchTime = System.currentTimeMillis();
         this.hitsToDestroy = hitsToDestroy;
         this.r = new Random();
+
+        //decides which ship img to use
         int odds = r.nextInt(100);
         isShipOfTypeOne = (odds > 60) ? true : false;
     }
 
+
     public void update(){
         long now = System.currentTimeMillis();
         Vector <EnemyShip> enemiesToRemove = new Vector<>();
+
+        // Create (RANDOM) new enemy if enough time passed since last launch (launchDelay)
         if(now - lastLaunchTime >= launchDelay * 1000 && currentAmount <= enemyMaxAmount){
-            // Create (RANDOM) new enemy
+            //choose img
             if(isShipOfTypeOne){
             enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, imageName, 0, 15, 15, fireDelay, stepDelay, this, moveVector, 8, hitsToDestroy));
             }else{
                 enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, "L1-ES2.png", 0, 15, 15, fireDelay, stepDelay, this, moveVector, 2, hitsToDestroy));
             }
             Utils.playSound("enemy_enter.wav");
-            lastLaunchTime = now;
+            lastLaunchTime = now;   //save new time
             currentAmount++;
         }
+        //update enemies & missiles, and remove the ones who are dead\OOS
         for (int i = 0; i < enemies.size() ; i++){
             enemies.get(i).update();
             if (enemies.get(i).isDone()  || enemies.get(i).isOutOfScreen()) {
@@ -76,6 +83,7 @@ public class Wave {
 
     }
 
+    //render missiles and enemy ships
     public void render(Graphics g, JPanel p){
         for (int i = 0; i < bullets.size() ; i++){
             bullets.get(i).drawSprite(g, p);
@@ -85,6 +93,7 @@ public class Wave {
         }
     }
 
+    //if enemy is not dead create a new missile
     public void fireFromEnemy(EnemyShip e){
     	if(!e.isDead()) {
             level.enemyFire(e.getCenterX(), (int) (e.getLocY() + e.getsHeight()), -(e.getAcceleration() + 2));
@@ -92,13 +101,17 @@ public class Wave {
         }
     }
 
+    //returns all enemys in wave
     public Vector <EnemyShip> getEnemies() {
         return enemies;
     }
 
+    //used when an enemy gets hit to remove life
     public void enemyHit(EnemyShip es) {
         es.gotHit();
     }
+
+    //returns true if all enemy ships launched and died or OOS
     public boolean isWaveOver() {
         return enemies.size() == 0 && currentAmount >= enemyMaxAmount;
     }

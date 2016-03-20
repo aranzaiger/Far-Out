@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import com.sagi.dayan.Games.Engine.GameEngine;
 
 /**
- * Created by sagi on 2/8/16.
+ * represtent a specific game stage
  */
 public class Stage extends JPanel implements Runnable{
 

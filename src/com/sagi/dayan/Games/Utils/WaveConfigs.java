@@ -3,11 +3,10 @@ package com.sagi.dayan.Games.Utils;
 import java.util.Vector;
 
 /**
- * Created by sagi on 3/18/16.
+ * this class configs settings and movement vector for different kinds of waves
  */
 public class WaveConfigs  {
-    public static final int DEMO = 0;//, UPPER_MIDDLE_LEFT=0, UPPER_MIDDLE_RIGHT=1;
-    //public static final int UPPER_LEFT = 2, UPPER_RIGHT=3;
+    public static final int DEMO = 0;
     Vector<WaveConfig> configs;
 
     public WaveConfigs(){
@@ -40,6 +39,7 @@ public class WaveConfigs  {
 
     }
 
+    //return requested wave configuration
     public WaveConfig getWaveConfig(int config){
         if (config < 0 || configs.size() <= config)
             throw new IllegalArgumentException("no such config...");

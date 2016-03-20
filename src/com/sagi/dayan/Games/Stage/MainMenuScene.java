@@ -17,7 +17,7 @@ import com.sagi.dayan.Games.Engine.GameEngine;
 import com.sagi.dayan.Games.Utils.Utils;
 
 /**
- * Created by sagi on 2/24/16.
+ * represent the main menu scene.
  */
 public class MainMenuScene extends Scene {
 
@@ -48,6 +48,7 @@ public class MainMenuScene extends Scene {
 
     }
 
+    //render all objects and players high scores
     @Override
     public void render(JPanel p) {
         sceneImage = new BufferedImage(this.stageWidth, this.stageHeight, Image.SCALE_FAST);
@@ -80,6 +81,7 @@ public class MainMenuScene extends Scene {
 
     }
 
+    //key listener for moving and selecting option in the main menu
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()){

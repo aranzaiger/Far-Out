@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * Created by sagi on 2/20/16.
+ * Represents a player ship
  */
 public class Player extends AnimatedSprite {
     private final int NORMAL_ANIMATION = 0, RIGHT_ANIMATION = 1, LEFT_ANIMATION = 2, PADDING_BOTTOM = 35, MORTAL_DELAY = 3;
@@ -46,6 +46,7 @@ public class Player extends AnimatedSprite {
         isGameOver = gameOver;
     }
 
+    //when player revived  - reset it to default position
     public void resetPlayer(){
         locX = startX;
         locY = startY;
@@ -68,6 +69,7 @@ public class Player extends AnimatedSprite {
         return isMortal;
     }
 
+    //besides position update, updated whether ship can fire or not
     @Override
     public void update() {
         long now = System.currentTimeMillis();
@@ -90,17 +92,14 @@ public class Player extends AnimatedSprite {
             locY = pHeight - animations.get(currentAnimation).getCurrentFrame().getHeight() - PADDING_BOTTOM;
         }
 
-        if(isGameOver){
-            //System.exit(1);
-        }
 
 
     }
 
+    //set horizontal and vertical direction
     public void sethDirection(int direction) {
         this.hDirection = direction;
     }
-
     public void setvDirection(int direction) {
         this.vDirection = direction;
         if(direction != NORMAL_ANIMATION){
@@ -127,10 +126,13 @@ public class Player extends AnimatedSprite {
         this.fireDelay = fireDelay;
     }
 
+    //update time since last fired
     public void updateFireTime(){
         lastFired = System.currentTimeMillis();
     }
 
+
+    //if player was dead dont draw (creates blinking effect)
     @Override
     public void drawSprite(Graphics g, JPanel p){
         long now = System.currentTimeMillis();

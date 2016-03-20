@@ -25,38 +25,40 @@ import com.sagi.dayan.Games.Engine.GameEngine;
 import com.sagi.dayan.Games.Utils.Utils;
 
 /**
- * Created by sagi on 2/20/16.
+ * This class holds all the logic for all the stages.
+ * stages themselfs contain only specific stage data.
  */
 public abstract class Level extends Scene {
 	protected final double PRESS_START_PULE = 0.3;
-	protected boolean toDrawStart;
+	protected boolean toDrawStart, isStarted;
+	protected int p1Speed = 10,currentWave, startingAnimationIndex, numOfPlayers, numOfWaves;
+
+	// used to save all players, missiles, enemy waves and blasts
 	protected Vector<Player> players;
-	protected int p1Speed = 10;
 	protected Vector<Missile> p1Missiles, p2Missiles, enemyMissiles;
-	protected Background bg;
-	protected int[] waveDelay;
-	protected int currentWave;
-	protected int[] yAxisStartingAnimation;
-	protected int startingAnimationIndex;
-	protected boolean isStarted;
 	protected Vector<Wave> waves;
 	protected Vector<Blast> blasts;
-	protected int numOfPlayers;
+	protected Background bg;
+	protected int[] yAxisStartingAnimation, waveDelay;
+
+
 	protected Map<Integer, Boolean> keys;
 	protected String title;
 	protected JLabel stageTitle;
 	protected long lastWaveTime, lastPulseTime;
-	protected int numOfWaves;
 
 
 
 	public Level(int width, int height, int numOfPlayers, GameEngine engine, String stageTitle, int[] waveDelay){
 		super(width, height, engine);
+		//initialize vectors
 		players = new Vector<>();
 		p1Missiles = new Vector<>();
 		p2Missiles = new Vector<>();
-		blasts = new Vector<Blast>();
+		blasts = new Vector<>();
 		enemyMissiles = new Vector<>();
+
+		//save additional information
 		this.waveDelay = waveDelay;
 		this.lastWaveTime = System.currentTimeMillis();
 		this.currentWave = 0;
@@ -70,6 +72,8 @@ public abstract class Level extends Scene {
 		this.title = stageTitle;
 		this.stageTitle = new JLabel(this.title);
 
+
+		//create requierd amount of players
 		if(numOfPlayers == 1) {
 			players.add(new Player((width / 2) + (GameEngine.PLAYER_WIDTH / 2), yAxisStartingAnimation[startingAnimationIndex],
 					width, height, p1Speed, "emptyImage.png", 0, GameEngine.PLAYER_WIDTH, GameEngine.PLAYER_HEIGHT, "P1",6));
@@ -81,12 +85,14 @@ public abstract class Level extends Scene {
 
 		}
 
+		//initialize keys
 		setupKeys();
 		Utils.playSound("jetSound.wav");
 		lastPulseTime = System.currentTimeMillis();
 		toDrawStart = true;
 	}
 
+	//initialize player 1 & 2 keys
 	private void setupKeys() {
 		int[] p1 = engine.getP1Controlles();
 		for(int i = 0 ; i < p1.length ; i++){
@@ -104,15 +110,18 @@ public abstract class Level extends Scene {
 	public void update() {
 		bg.update();
 		movePlayers();
-		Vector <Wave> wavesToRemove = new Vector<>();
+
+		//vectors to hold objects that needs to be removed
+		Vector<Wave> wavesToRemove = new Vector<>();
 		Vector<Blast> blastTRM = new Vector<>();
 
+		//check if enough time has passed and a new wave needs to be launched
 		long now = System.currentTimeMillis();
-		//        if(currentWave < waveDelay.length && now - lastWaveTime >= waveDelay[currentWave] * 1000){
 		if(currentWave < numOfWaves && now - lastWaveTime >= waveDelay[currentWave] * 1000){
 			launchWave(now);
 		}
 
+		//if still in new game start animation - advance animation
 		if(startingAnimationIndex < 3 && !isStarted){
 			if(startingAnimationIndex == 0){
 				startingAnimationIndex++;
@@ -133,7 +142,10 @@ public abstract class Level extends Scene {
 					startingAnimationIndex++;
 				}
 			}
-		}else{
+		}
+		//if finished game start animation - update players, missiles, enemy waves
+		//if waves are done - remove them
+		else{
 			isStarted = true;
 			for(int i = 0 ; i < players.size() ; i++){
 				players.get(i).update();
@@ -152,40 +164,43 @@ public abstract class Level extends Scene {
 			for(int i = 0 ; i < waves.size() ; i++){
 				waves.get(i).update();
 				if(waves.get(i).isWaveOver()) {
-					System.out.println("in remove");
 					wavesToRemove.add(waves.get(i));
 				}
 			}
 			waves.removeAll(wavesToRemove);
 
+			//check and set high score
 			if(engine.getP1Score() > engine.getP1HighScore())
 				engine.setP1HighScore(engine.getP1Score());
 			if(engine.getP2Score() > engine.getP2HighScore())
 				engine.setP2HighScore(engine.getP2Score());
 		}
+
+		//check all collisions
 		checkCollision();
 		engine.setGameOver(isGameOver());
+
+		//if all waves are done switch stage
 		if(currentWave >= numOfWaves && waves.size()==0)
 		{
-			System.out.println("Done");
 			engine.changeLevel();
 		}
 
 
+		//remove finished blasts and update existing
 		for(int i =0; i<blasts.size();i++){
 			if (blasts.get(i).isDone()){
-				System.out.println("removing blast");
 				blastTRM.add(blasts.get(i));
 			}
 			blasts.get(i).update();
 		}
-
 		blasts.removeAll(blastTRM);
 
 	}
 
 	protected abstract void launchWave(long time);
 
+	//determine if game is over according to player 1 & 2
 	private boolean isGameOver(){
 		if(numOfPlayers == 1) {
 			return players.get(0).isGameOver();
@@ -194,6 +209,7 @@ public abstract class Level extends Scene {
 		}
 	}
 
+	//set player 1 & 2 movement direction
 	private void movePlayers() {
 		/**
 		 * Player 1 Movement:
@@ -272,6 +288,7 @@ public abstract class Level extends Scene {
 		}
 	}
 
+	//render all sprites and elements
 	@Override
 	public void render(JPanel p) {
 		sceneImage = new BufferedImage(this.stageWidth, this.stageHeight, Image.SCALE_FAST);
@@ -281,6 +298,7 @@ public abstract class Level extends Scene {
 		Color c = g.getColor();
 		Font f = engine.getGameFont();
 
+		//if game didn't start yet - print stage title
 		if(!isStarted){
 			if(f == null) {
 				f = g.getFont();
@@ -288,7 +306,6 @@ public abstract class Level extends Scene {
 			f = f.deriveFont(60F);
 			g.setColor(Color.DARK_GRAY);
 			g.setFont(f);
-
 
 			// Get the FontMetrics
 			FontMetrics metrics = g.getFontMetrics(f);
@@ -298,16 +315,13 @@ public abstract class Level extends Scene {
 			int y = ((stageHeight - metrics.getHeight()) / 2) - metrics.getAscent();
 			g.drawString(this.title, x, y);
 			g.setColor(c);
-
 		}
-
 
 		if (isGameOver())
 		{
 			try {
 				System.in.read();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -338,8 +352,7 @@ public abstract class Level extends Scene {
 		g.drawString("Credits: "+ engine.getCredits(), stageWidth/2, 30);
 
 
-
-
+		//draw all missiles
 		for(int i = 0 ; i < p1Missiles.size() ; i++){
 			p1Missiles.get(i).drawSprite(g,p);
 		}
@@ -349,6 +362,8 @@ public abstract class Level extends Scene {
 		for(int i = 0 ; i < enemyMissiles.size() ; i++){
 			enemyMissiles.get(i).drawSprite(g,p);
 		}
+
+		//draw player 1 & 2 details (score, health & lives)
 		for(int i = 0 ; i < players.size() ; i++){
 			if(i == 0){
 				if(engine.getP1Health() > 0){
@@ -376,10 +391,13 @@ public abstract class Level extends Scene {
 				}
 			}
 		}
+
+		//render all waves
 		for(int i = 0 ; i < waves.size() ; i++){
 			waves.get(i).render(g,p);
 		}
 
+		//render all blasts
 		for(int i =0; i<blasts.size();i++){
 			blasts.get(i).drawSprite(g, p);
 		}
@@ -425,7 +443,11 @@ public abstract class Level extends Scene {
 		}
 	}
 
+
+	//check all possible collisions
 	public void checkCollision() {
+
+		//vectors to store objects that needs to be removed
 		Vector<Missile> p1MTR, p2MTR, eMTR;
 		eMTR = new Vector<>();
 		p1MTR = new Vector<>();
@@ -456,12 +478,12 @@ public abstract class Level extends Scene {
 			//player vs. enemy missile
 			for (int j = 0; j < enemyMissiles.size(); j++) {
 				if(CollisionUtil.collidesWith(players.get(i),enemyMissiles.get(j))){
+					if ((i==0 && engine.getP1Health()==10) ||(i==1 && engine.getP2Health()==10)) {
+						blasts.add(new Blast((int) players.get(i).getLocX(), (int) players.get(i).getLocY(), "explosion.png", 15));
+					}
 					playerHit(i);
 					if(playerIsAlive(i)) {
 						eMTR.add(enemyMissiles.get(j));
-					}else{
-						blasts.add(new Blast((int)players.get(i).getLocX(),(int)players.get(i).getLocY(),"explosion.png",15));
-						Utils.playSound("player_exp.wav");
 					}
 				}
 			}
@@ -472,18 +494,19 @@ public abstract class Level extends Scene {
 				for (int k = 0; k < waves.get(j).getEnemies().size(); k++) {
 					if (CollisionUtil.collidesWith(waves.get(j).getEnemies().get(k), players.get(i))) {
 						if(!waves.get(j).getEnemies().get(k).isDead()){
+							if ((i==0 && engine.getP1Health()==10) || (i==1 && engine.getP2Health()==10)) {
+								blasts.add(new Blast((int) players.get(i).getLocX(), (int) players.get(i).getLocY(), "explosion.png", 15));
+							}
 							playerHit(i);
 						}
 						if(playerIsAlive(i)) {
 							waves.get(j).enemyHit(waves.get(j).getEnemies().get(k));
-						}else{
-							blasts.add(new Blast((int)players.get(i).getLocX(),(int)players.get(i).getLocY(),"explosion.png",15));
-
 						}
 					}
 				}
 			}
 
+			//check for each player seperatly for score
 			//player 1 missile vs. enemy
 			if(i == 0){
 				for(int m = 0 ; m < p1Missiles.size() ; m++){
@@ -502,7 +525,7 @@ public abstract class Level extends Scene {
 
 			}
 
-			//player 1 missile vs. enemy
+			//player 2 missile vs. enemy
 			else {
 				for(int m = 0 ; m < p2Missiles.size() ; m++){
 					for (int j = 0; j < waves.size(); j++) {
@@ -522,14 +545,14 @@ public abstract class Level extends Scene {
 		}
 
 
-
-
+		//remove all objects that needs to be removed
 		p1Missiles.removeAll(p1MTR);
 		p2Missiles.removeAll(p2MTR);
 		enemyMissiles.removeAll(eMTR);
 
 	}
 
+	//checks if player is alive
 	protected boolean playerIsAlive(int i){
 		if(i == 0){
 			return !(engine.getP1Lives() <= 0);
@@ -538,6 +561,7 @@ public abstract class Level extends Scene {
 		}
 	}
 
+	//reduce player health and play hit audio
 	protected void playerHit(int i){
 		if(players.get(i).isMortal()){
 			Utils.playSound((i == 0) ? "player_1_hit.wav" : "player_2_hit.wav");
@@ -554,6 +578,7 @@ public abstract class Level extends Scene {
 		}
 	}
 
+	//create a new enemy missile
 	public void enemyFire(int x, int y, int acc) {
 		enemyMissiles.add(new Missile(x, y,getStageWidth(),getStageHeight(), acc,"E1-Fire.png", 15));
 	}

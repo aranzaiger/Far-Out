@@ -1,7 +1,7 @@
 package com.sagi.dayan.Games.Elements;
 
 /**
- * Created by sagi on 2/20/16.
+ * Represents background for the game
  */
 public class Background extends Sprite {
     public Background(int x, int y, int w, int h, int acc, String imgName, double angle, int sWidth, int sHeight) {

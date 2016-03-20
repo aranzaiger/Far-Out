@@ -1,7 +1,7 @@
 package com.sagi.dayan.Games.Elements;
 
 /**
- * Created by sagi on 2/20/16.
+ * represents a missile of enemy/player ship
  */
 public class Missile extends AnimatedSprite {
 
