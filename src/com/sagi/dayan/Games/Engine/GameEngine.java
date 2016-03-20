@@ -173,16 +173,25 @@ public class GameEngine {
         stage.removeKeyListener(scene);
         switch (currentLevel){
             case 0:
-                scene = new FirstStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 1.0 =-", new int[]{5, 1,1,1});
+                scene = new FirstStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 1.0 =-", new int[]{5, 5});
                 break;
             case 1:
-                scene = new SecondStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 2.0 =-", new int[]{5, 5,5,5});
+                scene = new SecondStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 2.0 =-", new int[]{5, 5,5});
                 break;
             case 2:
-                scene = new ThirdStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 3.0 =-", new int[]{5, 0,0,8});
+                scene = new ThirdStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 3.0 =-", new int[]{5, 0,2,8});
                 break;
             case 3:
-                scene = new FourthStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 4.0 =-", new int[]{5, 0,0,8});
+                scene = new FourthStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 4.0 =-", new int[]{5, 0,0,7});
+                break;
+            case 4:
+                scene = new FifthStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 5.0 =-", new int[]{5, 1,3,8, 10, 10});
+                break;
+            case 5:
+                scene = new SixthStage(pWidth, pHeight, numOfPlayers, this, "-= STAGE 6.0 =-", new int[]{5, 0,0,0, 0, 0, 10, 20});
+                break;
+            case 6:
+                scene = new BlitzStage(pWidth, pHeight, numOfPlayers, this, "-= BLITZ STAGE =-", new int[]{5, 0,0,0, 0, 0, 0, 0, 0, 0, 0});
                 break;
 
         }

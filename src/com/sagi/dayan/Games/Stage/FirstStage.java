@@ -10,7 +10,7 @@ import com.sagi.dayan.Games.Utils.WaveConfigs;
  */
 public class FirstStage extends Level{
 	
-	protected final int NUM_OF_WAVES = 4;
+	protected final int NUM_OF_WAVES = 2;
 
     public FirstStage(int width, int height, int numOfPlayers, GameEngine engine, String stageTitle, int[] waveDelay) {
         super(width, height, numOfPlayers, engine, stageTitle, waveDelay);
@@ -27,31 +27,24 @@ public class FirstStage extends Level{
         switch (currentWave){
             case 0:
                 numOfEnemies = 5;
-                fireDelay = 0.1;
-                launchDelay = 0.5;
+                fireDelay = 1.1;
+                launchDelay = 2;
                 numOfHits = 1;
-                wc = engine.getWaveConfigs().getWaveConfig(6);
+                wc = engine.getWaveConfigs().getWaveConfig(0);
                 break;
             case 1:
                 numOfEnemies = 5;
-                fireDelay = 1;
-                launchDelay = 1;
-                numOfHits = 2;
-                wc = engine.getWaveConfigs().getWaveConfig(3);
+                fireDelay = 0.8;
+                launchDelay = 2;
+                numOfHits = 1;
+                wc = engine.getWaveConfigs().getWaveConfig(1);
                 break;
             case 2:
-                numOfEnemies = 10;
-                fireDelay = 0.8;
-                launchDelay = 1;
-                numOfHits = 3;
-                wc = engine.getWaveConfigs().getWaveConfig(2);
-                break;
-            case 3:
                 numOfEnemies = 15;
-                fireDelay = 1.5;
-                launchDelay = 1;
-                numOfHits = 5;
-                wc = engine.getWaveConfigs().getWaveConfig(7);
+                fireDelay = 0.7;
+                launchDelay = 1.5;
+                numOfHits = 1;
+                wc = engine.getWaveConfigs().getWaveConfig(2);
                 break;
             default:
                 wc = engine.getWaveConfigs().getWaveConfig(WaveConfigs.DEMO);

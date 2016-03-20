@@ -223,9 +223,7 @@ public abstract class Level extends Scene {
 				p1Missiles.add(new Missile(players.get(0).getCenterX() - 15, (int) players.get(0).getLocY(), getStageWidth(), getStageHeight(), players.get(0).getAcceleration() + 3, "P1Laser.png", 4));
 				players.get(0).updateFireTime();
 			}
-		}
-		if(keys.get(engine.getP1Controlles()[GameEngine.USE_CREDIT]) && engine.getP1Health() <= 0 ){
-			if(engine.getCredits() > 0) {
+			if(engine.getP1Health() <= 0 && engine.getP1Health() <= 0) {
 				engine.revivePlayer(0);
 				players.get(0).resetPlayer();
 

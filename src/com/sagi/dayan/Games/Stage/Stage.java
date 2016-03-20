@@ -46,7 +46,6 @@ public class Stage extends JPanel implements Runnable{
 
     @Override
     public void paintComponent(Graphics g) {
-//        System.out.println("Paint Component");
         super.paintComponent(g);
         g.drawImage(engine.getScene(),0,0,this);
         g.dispose();
