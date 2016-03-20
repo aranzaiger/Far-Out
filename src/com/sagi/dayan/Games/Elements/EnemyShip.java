@@ -4,7 +4,7 @@ package com.sagi.dayan.Games.Elements;
 import com.sagi.dayan.Games.Utils.Utils;
 
 /**
- * Created by sagi on 2/20/16.
+ * represents an enemy ship
  */
 public class EnemyShip extends AnimatedSprite {
     protected int currentStep;
@@ -15,6 +15,7 @@ public class EnemyShip extends AnimatedSprite {
     protected int hitsToDestroy;
     protected boolean isDone;
     protected long startExploded;
+
     public EnemyShip(int x, int y, int w, int h, int acc, String imgName, double angle, int sWidth, int sHeight,double fireDelay, double stepDelay, Wave wave, int[] moveVector,int numOfFirstFrames, int hitsToDestroy) {
         super(x, y, w, h, acc, imgName, angle, sWidth, sHeight, numOfFirstFrames);
         this.fireDelay = fireDelay;
@@ -28,6 +29,7 @@ public class EnemyShip extends AnimatedSprite {
 
     }
 
+    //add enemy ship and blast animation
     @Override
     protected void initFirstAnimation(String spriteSheet, int numOfFirstFrames) {
         if(imageName == "L1-ES2.png"){
@@ -58,6 +60,7 @@ public class EnemyShip extends AnimatedSprite {
         locX += acceleration * Math.cos(Math.toRadians(moveVector[currentStep]));
         locY -= acceleration * -1* Math.sin(Math.toRadians(moveVector[currentStep]));
     }
+    //when enemy gets hit- lower life and set explosion sound if dead
     public void gotHit() {
         hitsToDestroy--;
         if(hitsToDestroy == 0){
@@ -66,8 +69,8 @@ public class EnemyShip extends AnimatedSprite {
             currentAnimation++;
             Utils.playSound("enemy_exp.wav");
         }
-        System.out.println("GOT HIT " + hitsToDestroy);
     }
+
     public boolean isDead() {
         return hitsToDestroy <= 0;
     }

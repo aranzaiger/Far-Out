@@ -6,7 +6,8 @@ import com.sagi.dayan.Games.Utils.WaveConfig;
 import com.sagi.dayan.Games.Utils.WaveConfigs;
 
 /**
- * Created by sagi on 3/19/16.
+ * Holds specific stage data
+ * like: number of waves, wave types, num of enemies in each wave, launch delay etc.
  */
 public class BlitzStage extends Level{
 	
@@ -20,7 +21,6 @@ public class BlitzStage extends Level{
     @Override
     protected void launchWave(long now) {
         lastWaveTime = now;
-        System.out.println("New Wave!! " + currentWave + ", Time: " + now);
         WaveConfig wc;
         int numOfEnemies = 5, numOfHits = 1;
         double launchDelay = 0.5, fireDelay = 5;

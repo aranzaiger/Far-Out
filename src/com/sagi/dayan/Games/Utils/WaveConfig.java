@@ -1,7 +1,7 @@
 package com.sagi.dayan.Games.Utils;
 
 /**
- * Created by sagi on 3/18/16.
+ * this class configures the structure of a wave
  */
 public  class WaveConfig {
     protected int[] moveVector;
