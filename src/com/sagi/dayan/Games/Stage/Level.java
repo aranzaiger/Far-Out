@@ -217,13 +217,15 @@ public abstract class Level extends Scene {
 			players.get(0).setvDirection(0);
 		}
 		if(keys.get(engine.getP1Controlles()[GameEngine.FIRE]) ){
-			if(players.get(0).isAbleToFire() && engine.getP1Health() > 0) {
+			if(players.get(0).isAbleToFire() && engine.getP1Health() > 0){
 				//SOUND
 				Utils.playSound("player_laser.wav");
-				p1Missiles.add(new Missile(players.get(0).getCenterX() - 15, (int) players.get(0).getLocY(), getStageWidth(), getStageHeight(), players.get(0).getAcceleration() + 3, "P1Laser.png", 4));
+				p1Missiles.add(new Missile(players.get(0).getCenterX() - 15, (int)players.get(0).getLocY(),getStageWidth(),getStageHeight(),players.get(0).getAcceleration() + 3, "P1Laser.png", 4));
 				players.get(0).updateFireTime();
 			}
-			if(engine.getP1Health() <= 0 && engine.getP1Health() <= 0) {
+		}
+		if(keys.get(engine.getP1Controlles()[GameEngine.USE_CREDIT]) && engine.getP1Health() <= 0 ){
+			if(engine.getCredits() > 0) {
 				engine.revivePlayer(0);
 				players.get(0).resetPlayer();
 
@@ -253,7 +255,7 @@ public abstract class Level extends Scene {
 				players.get(1).setvDirection(0);
 			}
 			if(keys.get(engine.getP2Controlles()[GameEngine.FIRE]) ){
-				if(players.get(1).isAbleToFire() && engine.getP1Health() > 0){
+				if(players.get(1).isAbleToFire() && engine.getP2Health() > 0){
 					//SOUND
 					Utils.playSound("player_laser.wav");
 					p2Missiles.add(new Missile(players.get(1).getCenterX() - 15, (int)players.get(1).getLocY(),getStageWidth(),getStageHeight(),players.get(1).getAcceleration() + 3, "P1Laser.png", 4));
