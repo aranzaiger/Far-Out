@@ -1,11 +1,14 @@
 package com.sagi.dayan.Games.Elements;
 
 import java.awt.Graphics;
+import java.util.Random;
 import java.util.Vector;
 
+import javax.rmi.CORBA.Util;
 import javax.swing.JPanel;
 
 import com.sagi.dayan.Games.Stage.Level;
+import com.sagi.dayan.Games.Utils.Utils;
 
 /**
  * Created by sagi on 3/11/16.
@@ -21,6 +24,8 @@ public class Wave {
     protected long lastLaunchTime;
     protected String imageName;
     protected int hitsToDestroy;
+    protected Random r;
+    protected boolean isShipOfTypeOne;
 
     public Wave(int enemyMaxAmount, int[] moveVector, double fireDelay, double stepDelay, double launchDelay, int acc, String imageName, int startX, int startY, Level stage, int hitsToDestroy){
         this.enemies = new Vector<>();
@@ -38,14 +43,22 @@ public class Wave {
         this.moveVector = moveVector;
         this.lastLaunchTime = System.currentTimeMillis();
         this.hitsToDestroy = hitsToDestroy;
+        this.r = new Random();
+        int odds = r.nextInt(100);
+        isShipOfTypeOne = (odds > 60) ? true : false;
     }
 
     public void update(){
         long now = System.currentTimeMillis();
         Vector <EnemyShip> enemiesToRemove = new Vector<>();
         if(now - lastLaunchTime >= launchDelay * 1000 && currentAmount <= enemyMaxAmount){
-            // Create new enemy
-            enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, imageName, 0, 15, 15, fireDelay, stepDelay, this, moveVector, 7, hitsToDestroy));
+            // Create (RANDOM) new enemy
+            if(isShipOfTypeOne){
+            enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, imageName, 0, 15, 15, fireDelay, stepDelay, this, moveVector, 8, hitsToDestroy));
+            }else{
+                enemies.add(new EnemyShip(startX, startY, level.getStageHeight(), level.getStageHeight(), acc, "L1-ES2.png", 0, 15, 15, fireDelay, stepDelay, this, moveVector, 2, hitsToDestroy));
+            }
+            Utils.playSound("enemy_enter.wav");
             lastLaunchTime = now;
             currentAmount++;
         }
@@ -73,8 +86,10 @@ public class Wave {
     }
 
     public void fireFromEnemy(EnemyShip e){
-    	if(!e.isDead())
-    		level.enemyFire(e.getCenterX(), (int)(e.getLocY() + e.getsHeight()), -(e.getAcceleration() + 2));
+    	if(!e.isDead()) {
+            level.enemyFire(e.getCenterX(), (int) (e.getLocY() + e.getsHeight()), -(e.getAcceleration() + 2));
+            Utils.playSound("enemy_relese.wav");
+        }
     }
 
     public Vector <EnemyShip> getEnemies() {

@@ -1,6 +1,7 @@
 package com.sagi.dayan.Games.Elements;
 
 
+import com.sagi.dayan.Games.Utils.Utils;
 
 /**
  * Created by sagi on 2/20/16.
@@ -29,8 +30,11 @@ public class EnemyShip extends AnimatedSprite {
 
     @Override
     protected void initFirstAnimation(String spriteSheet, int numOfFirstFrames) {
-        animations.add(new Animation(imageName, 8, 500));
-
+        if(imageName == "L1-ES2.png"){
+            animations.add(new Animation(imageName, numOfFirstFrames, 100));
+        }else {
+            animations.add(new Animation(imageName, numOfFirstFrames, 300));
+        }
     }
 
     @Override
@@ -60,6 +64,7 @@ public class EnemyShip extends AnimatedSprite {
             startExploded = System.currentTimeMillis();
             animations.add(new Animation("explosion.png", 16, 500));
             currentAnimation++;
+            Utils.playSound("enemy_exp.wav");
         }
         System.out.println("GOT HIT " + hitsToDestroy);
     }

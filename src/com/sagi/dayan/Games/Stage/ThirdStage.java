@@ -26,32 +26,32 @@ public class ThirdStage extends Level{
         double launchDelay = 0.5, fireDelay = 5;
         switch (currentWave){
             case 0:
-                numOfEnemies = 5;
-                fireDelay = 0.5;
-                launchDelay = 0.5;
+                numOfEnemies = 10;
+                fireDelay = 0.8;
+                launchDelay = 1.5;
                 numOfHits = 1;
-                wc = engine.getWaveConfigs().getWaveConfig(6);
+                wc = engine.getWaveConfigs().getWaveConfig(7);
                 break;
             case 1:
-                numOfEnemies = 5;
-                fireDelay = 0.3;
-                launchDelay = 1;
-                numOfHits = 2;
-                wc = engine.getWaveConfigs().getWaveConfig(3);
-                break;
-            case 2:
-                numOfEnemies = 10;
-                fireDelay = 0.3;
-                launchDelay = 1;
-                numOfHits = 3;
+                numOfEnemies = 15;
+                fireDelay = 0.7;
+                launchDelay = 1.4;
+                numOfHits = 1;
                 wc = engine.getWaveConfigs().getWaveConfig(2);
                 break;
+            case 2:
+                numOfEnemies = 25;
+                fireDelay = 0.5;
+                launchDelay = 1.4;
+                numOfHits = 2;
+                wc = engine.getWaveConfigs().getWaveConfig(0);
+                break;
             case 3:
-                numOfEnemies = 15;
-                fireDelay = 0.2;
+                numOfEnemies = 5;
+                fireDelay = 0.4;
                 launchDelay = 1;
-                numOfHits = 5;
-                wc = engine.getWaveConfigs().getWaveConfig(7);
+                numOfHits = 4;
+                wc = engine.getWaveConfigs().getWaveConfig(1);
                 break;
             default:
                 wc = engine.getWaveConfigs().getWaveConfig(WaveConfigs.DEMO);
