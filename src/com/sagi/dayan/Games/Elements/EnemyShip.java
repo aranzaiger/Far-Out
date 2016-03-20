@@ -29,8 +29,11 @@ public class EnemyShip extends AnimatedSprite {
 
     @Override
     protected void initFirstAnimation(String spriteSheet, int numOfFirstFrames) {
-        animations.add(new Animation(imageName, 8, 500));
-
+        if(imageName == "L1-ES2.png"){
+            animations.add(new Animation(imageName, numOfFirstFrames, 100));
+        }else {
+            animations.add(new Animation(imageName, numOfFirstFrames, 300));
+        }
     }
 
     @Override
